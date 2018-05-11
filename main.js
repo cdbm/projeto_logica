@@ -1,4 +1,5 @@
 let text =readFormula('./Entrada2.in')
+const sat = require ('./writer.js')
 let n = parseInt(text[0])
 var aaa=0
 while(aaa<=n){
@@ -18,7 +19,6 @@ while(aaa<=n){
 // daqui pra baixo é a resolução da tabela verdade 
 function solve(text){
 	let tent =0
-	const sat = require ('./writer.js')
 	let string =""
 	let b
 	let count =0
