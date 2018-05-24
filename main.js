@@ -2,6 +2,7 @@ let text =readFormula('./Entrada.in')
 const sat = require ('./writer.js')
 let n = parseInt(text[0])
 var aaa=0
+
 while(aaa<=n){
 	if(text[aaa].includes("TT")){
 		solve(text[aaa], aaa)
@@ -17,6 +18,7 @@ while(aaa<=n){
    return text;
 }
 // daqui pra baixo é a resolução da tabela verdade 
+//o problema é na hora de chamar a função v, passe o parametro certo
 function solve(text, indice){
 	let ass = 0
 	let tent =0
@@ -24,11 +26,13 @@ function solve(text, indice){
 	let b
 	let count =0
 	let posit = []
+if(text.includes("(")){
 	b = readSub(text)
 	b = sortclaus(b)
 	let variaveis = [-1, -1, -1, -1]
 	let usadas = []
 	let u=0
+	
 	for(i=0; i<b.length; i++){
 		if(b[i].includes("P")){
 			variaveis[0] = 0;
@@ -72,7 +76,7 @@ function solve(text, indice){
 		string = string + "  "
 	}
 
-	
+	let satis = false
 	let tam = string.length
 	for(ax=0; ax<Math.pow(2, assignment.length); ax++){
 		
@@ -87,12 +91,9 @@ function solve(text, indice){
 		for(sd=0; sd<assignment.length; sd++){
 			st = st + assignment[sd]
 		}
-		
+		let result = 0
 		for(dc=0; dc<tam; dc++){
-		
-		
-
-			let result = 0
+			
 			if(assignment.length == 3){	
 				if(dc +22 == posit[xx]){
 					
@@ -103,9 +104,11 @@ function solve(text, indice){
 					}
 					string = string + result
 					xx++
+					
 				}else{
 					string = string + " "
 				}
+				
 			}else if(assignment.length == 2){
 				if(dc +20 == posit[xx]){
 					if(v(b[xx], st,usadas)){
@@ -115,9 +118,11 @@ function solve(text, indice){
 					}
 					string = string + result
 					xx++
+					
 				}else{
 					string = string + " "
 				}
+				
 			}else if(assignment.length == 1 ){
 				if(dc +18 == posit[xx]){
 					if(v(b[xx], st,usadas)){
@@ -127,9 +132,11 @@ function solve(text, indice){
 					}
 					string = string + result
 					xx++
+					
 				}else{
 					string = string + " "
 				}
+				
 			}else if(assignment.length == 4){
 				if(dc +24 == posit[xx]){
 					if(v(b[xx], st,usadas)){
@@ -139,24 +146,46 @@ function solve(text, indice){
 					}
 					string = string + result
 					xx++
+					
 				}else{
 					string = string + " "
 				}
+				
 			}
 		
 		}
+		if(result ==1){
+			satis =true
+		}
+
 		tent++		
 		assignment = nextAssignment(tent, assignment.length)
 		
 	
 	
 	}
+	string = string +"\r\n"
+
+	
+	if(satis){
+		string = string + "Sim, é satisfatível."
+	}else{
+		string = string + "Não, não é satisfatível."
+	}
+
 
 string = string + "\r\n\r\n"	
+
+}else{
+	string = string + "Problema #" + indice +"\r\n"
+	string = string + text.charAt(3) + " |\r\n"
+	string = string + "0 |\r\n"
+	string = string + "1 |\r\n"
+	string = string + "Sim, é satisfatível.\r\n\r\n"
+}
 console.log(string)
 sat.write(string)
-
-return string
+	return string
 }
 
 function v(text, assignment, usadas){
@@ -202,7 +231,11 @@ function v(text, assignment, usadas){
  	}
  
  	let id =0
-	if(nva == 1){
+ 	if(text.charAt(0) == "~"){
+			text = text.substring(1, text.length)
+			
+			retorno = !v(text, assignment, usadas)
+		}else if(nva == 1){
 			if(text.includes("P")){
 				for(i=0; i<assignment.length; i++){
 					if(ordem[i] =="P"){
@@ -288,7 +321,7 @@ function v(text, assignment, usadas){
 		
 	}else{
 		indice = foundOp(text)
-		
+
 		let a
 		let b
 		a = text.substring(0, indice-1)
@@ -307,6 +340,7 @@ function v(text, assignment, usadas){
 		}else if(text.charAt(indice) == ">"){
  			retorno = (!(v(a, assignment, usadas)) || v(b,assignment, usadas))
 		}
+
 	}
 }
 
