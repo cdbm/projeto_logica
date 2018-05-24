@@ -183,7 +183,6 @@ string = string + "\r\n\r\n"
 	string = string + "1 |\r\n"
 	string = string + "Sim, é satisfatível.\r\n\r\n"
 }
-console.log(string)
 sat.write(string)
 	return string
 }
