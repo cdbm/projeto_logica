@@ -17,7 +17,6 @@ while(aaa<=n){
    return text;
 }
 // daqui pra baixo é a resolução da tabela verdade 
-//o problema é na hora de chamar a função v, passe o parametro certo
 function solve(text, indice){
 	let ass = 0
 	let tent =0
