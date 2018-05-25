@@ -1,4 +1,4 @@
-let text =readFormula('./Entrada.in')
+let text =readFormula('./Entrada3.in')
 const sat = require ('./writer.js')
 let n = parseInt(text[0])
 var aaa=0
@@ -18,6 +18,7 @@ while(aaa<=n){
    return text;
 }
 // daqui pra baixo é a resolução da tabela verdade 
+//o problema é na hora de chamar a função v, passe o parametro certo
 function solve(text, indice){
 	let ass = 0
 	let tent =0
@@ -76,6 +77,7 @@ if(text.includes("(")){
 	}
 
 	let satis = false
+	let taut = true
 	let tam = string.length
 	for(ax=0; ax<Math.pow(2, assignment.length); ax++){
 		
@@ -155,6 +157,8 @@ if(text.includes("(")){
 		}
 		if(result ==1){
 			satis =true
+		}if(result == 0 ){
+			taut = false
 		}
 
 		tent++		
@@ -167,9 +171,14 @@ if(text.includes("(")){
 
 	
 	if(satis){
-		string = string + "Sim, é satisfatível."
+		string = string + "Sim, é satisfatível.\r\n"
 	}else{
-		string = string + "Não, não é satisfatível."
+		string = string + "Não, não é satisfatível.\r\n"
+	}
+	if(taut){
+		string = string + "Sim, é tautologia."
+	}else{
+		string = string + "Não, não é tautologia."
 	}
 
 
@@ -182,6 +191,7 @@ string = string + "\r\n\r\n"
 	string = string + "1 |\r\n"
 	string = string + "Sim, é satisfatível.\r\n\r\n"
 }
+
 sat.write(string)
 	return string
 }
