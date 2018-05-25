@@ -195,7 +195,8 @@ string = string + "\r\n\r\n"
 	string = string + text.charAt(3) + " |\r\n"
 	string = string + "0 |\r\n"
 	string = string + "1 |\r\n"
-	string = string + "Sim, é satisfatível.\r\n\r\n"
+	string = string + "Sim, é satisfatível.\r\n"
+	string = string + "Sim, é tautologia.\r\n\r\n"
 }
 //colocando no .out
 sat.write(string)
