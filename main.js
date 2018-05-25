@@ -18,7 +18,7 @@ while(aaa<=n){
    return text;
 }
 // daqui pra baixo é a resolução da tabela verdade 
-//o problema é na hora de chamar a função v, passe o parametro certo
+
 function solve(text, indice){
 	let ass = 0
 	let tent =0
@@ -26,13 +26,14 @@ function solve(text, indice){
 	let b
 	let count =0
 	let posit = []
-if(text.includes("(")){
+
+if(text.includes("(")){ //checagem pra ver se não é apenas uma unitaria
 	b = readSub(text)
 	b = sortclaus(b)
 	let variaveis = [-1, -1, -1, -1]
 	let usadas = []
 	let u=0
-	
+	//quais variaveis estão sendo usadas nesse caso
 	for(i=0; i<b.length; i++){
 		if(b[i].includes("P")){
 			variaveis[0] = 0;
@@ -53,10 +54,12 @@ if(text.includes("(")){
 			u++
 		}
 	}
+	//primeiro assignment gerado
 	let assignment = []
 	for(k=0;k<u; k++){
 		assignment[k] = 0
 	}
+	//print da primeira linha
 	string = string + "Problema #" + indice +"\r\n"
 	for(l=0;l<u; l++){
 		if(usadas[l] == 0){
@@ -79,6 +82,7 @@ if(text.includes("(")){
 	let satis = false
 	let taut = true
 	let tam = string.length
+	//montagem da tabela verdade
 	for(ax=0; ax<Math.pow(2, assignment.length); ax++){
 		
 		string = string + "\r\n"
@@ -94,10 +98,11 @@ if(text.includes("(")){
 		}
 		let result = 0
 		for(dc=0; dc<tam; dc++){
-			
+			//distinção de numeros de varaiveis
 			if(assignment.length == 3){	
 				if(dc +22 == posit[xx]){
-					
+					//chamando a recursão
+					//o msm ocorre nos outros casos
 					if(v(b[xx], st,usadas)){
 						result = 1
 					}else{
@@ -155,12 +160,13 @@ if(text.includes("(")){
 			}
 		
 		}
+		//checagem para tautologia e satisfabilidade
 		if(result ==1){
 			satis =true
 		}if(result == 0 ){
 			taut = false
 		}
-
+		// novo assignment
 		tent++		
 		assignment = nextAssignment(tent, assignment.length)
 		
@@ -184,14 +190,14 @@ if(text.includes("(")){
 
 string = string + "\r\n\r\n"	
 
-}else{
+}else{//tratamento do caso unitário 
 	string = string + "Problema #" + indice +"\r\n"
 	string = string + text.charAt(3) + " |\r\n"
 	string = string + "0 |\r\n"
 	string = string + "1 |\r\n"
 	string = string + "Sim, é satisfatível.\r\n\r\n"
 }
-
+//colocando no .out
 sat.write(string)
 	return string
 }
@@ -206,7 +212,7 @@ function v(text, assignment, usadas){
 	let d =0
 	let ordem = []
 
-	
+	//arrumando formatação e checando se a subexpressão é do tipo ((a v b) < c)
 	if(text.charAt(0) == " "){
 		text =  text.replace(" ", "")
 	}
@@ -239,11 +245,11 @@ function v(text, assignment, usadas){
  	}
  
  	let id =0
- 	if(text.charAt(0) == "~"){
+ 	if(text.charAt(0) == "~"){//caso da negação para expressões não unitárias
 			text = text.substring(1, text.length)
 			
 			retorno = !v(text, assignment, usadas)
-		}else if(nva == 1){
+		}else if(nva == 1){//tratamento de expressões unitárias
 			if(text.includes("P")){
 				for(i=0; i<assignment.length; i++){
 					if(ordem[i] =="P"){
@@ -328,24 +334,24 @@ function v(text, assignment, usadas){
 			}
 		
 	}else{
-		indice = foundOp(text)
+		indice = foundOp(text) // procurando o indice em que o operador dessa subespressão se encontra
 
 		let a
 		let b
 		a = text.substring(0, indice-1)
 		b = text.substring(indice+1, text.length)
 		
-		if(text.charAt(indice) =="v"){
+		if(text.charAt(indice) =="v"){//tratamento do ou
 			retorno = (v(a, assignment, usadas) || v(b,assignment, usadas))
-		}else if(text.charAt(indice) == "&"){
+		}else if(text.charAt(indice) == "&"){// tratamento do e
  			retorno = (v(a, assignment, usadas) && v(b,assignment, usadas))
-		}else if(text.charAt(indice) == "<"){
+		}else if(text.charAt(indice) == "<"){//tratamento da bi implicação
  			if(v(a, assignment, usadas) == v(b,assignment, usadas) ){
  				retorno = true
  			}else{
  				retorno = false
  			}
-		}else if(text.charAt(indice) == ">"){
+		}else if(text.charAt(indice) == ">"){// tratamento da implicação
  			retorno = (!(v(a, assignment, usadas)) || v(b,assignment, usadas))
 		}
 
@@ -356,6 +362,7 @@ return retorno;
 }
 
 function readSub(text){
+	//função para retirar as subformulas
 	let pilha = []
 	let subs = []
 	let s =0
@@ -407,7 +414,7 @@ function decpbin(a) {
     }
   }
 
-function sortclaus(text){
+function sortclaus(text){//deixando as subformulas em ordem crescente de tamanho
 	let n = text.length
 	for(i=0; i<n-1; i++){
 		for(j=0; j<n-i-1; j++){
@@ -421,7 +428,7 @@ function sortclaus(text){
 	return text
 }
 
-function foundOp(text){
+function foundOp(text){//função que acha o operador correto de uma dada subexpressão
 	let op 
 
 	for(i=0; i<text.length; i++){
@@ -458,7 +465,7 @@ function foundOp(text){
 return op
 }	
 
-function isSpec(text){
+function isSpec(text){//checando se a subexpressão é do tipo ((a v b) < c)
 	if(text.charAt(0) == " "){
 		text =  text.replace(" ", "")
 	}
