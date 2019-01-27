@@ -1,4 +1,4 @@
-let text =readFormula('./Entrada3.in')
+let text =readFormula('./Entrada.in')
 const sat = require ('./writer.js')
 let n = parseInt(text[0])
 var aaa=0
